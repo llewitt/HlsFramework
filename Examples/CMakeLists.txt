@@ -1,0 +1,4 @@
+add_subdirectory(00_AllInOne)
+add_subdirectory(01_MigratingToDataflow)
+add_subdirectory(02_MigratingToFreeRunningKernels)
+

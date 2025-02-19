@@ -1,7 +1,7 @@
 function(compile_unit_test)
   set(options)
-  set(oneValueArgs KERNEL INCLUDE)
-  set(multiValueArgs SOURCES)
+  set(oneValueArgs KERNEL)
+  set(multiValueArgs SOURCES DEPENDS)
   cmake_parse_arguments(compile_unit_test
                         "${options}" 
                         "${oneValueArgs}"
@@ -12,8 +12,7 @@ function(compile_unit_test)
                  src/${compile_unit_test_KERNEL}.cxx 
                  ${compile_unit_test_SOURCES})
 
-  target_link_libraries(${compile_unit_test_KERNEL}UnitTest.exe PRIVATE VariantLib)
-  target_link_libraries(${compile_unit_test_KERNEL}UnitTest.exe PRIVATE ${Boost_LIBRARIES})
+  target_link_libraries(${compile_unit_test_KERNEL}UnitTest.exe PRIVATE ${Boost_LIBRARIES} ${compile_unit_test_DEPENDS})
 
   target_include_directories(${compile_unit_test_KERNEL}UnitTest.exe PRIVATE include)
   target_include_directories(${compile_unit_test_KERNEL}UnitTest.exe PRIVATE /opt/Xilinx/Vitis_HLS/2024.1/include)

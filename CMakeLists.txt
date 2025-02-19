@@ -16,3 +16,6 @@ if(${DO_SAVE_TEMPS})
   set(SAVE_TEMPS --save-temps)
 endif()
 
+add_subdirectory(UnitTesting)
+add_subdirectory(Examples)
+

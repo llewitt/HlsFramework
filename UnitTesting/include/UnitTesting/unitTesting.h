@@ -1,4 +1,14 @@
+#ifndef UNIT_TESTING_H
+#define UNIT_TESTING_H
+
+#include <cstdlib>
+#include <vector>
+
+#include "hls_stream.h"
+
 namespace UnitTesting {
+static constexpr std::size_t maxDataLength = 16384;
+
 template <typename F, typename T>
 bool streamToStream(
   const F& function,
@@ -41,7 +51,7 @@ bool memoryMapToStream(
   const std::vector<T>& inputWords, 
   const std::vector<U>& referenceWords
 ) {
-  std::array<T, Variant::maxDataLength> input{};
+  std::array<T, maxDataLength> input{};
   hls::stream<U> output{};
 
   if (inputWords.size() > input.size()) {
@@ -80,14 +90,15 @@ bool streamToMemoryMap(
   const std::vector<U>& referenceWords
 ) {
   hls::stream<T> input{};
-  std::array<U, Variant::maxDataLength> output{};
+  std::array<U, maxDataLength> output{};
 
   if (referenceWords.size() > output.size()) {
     return false;
   }
 
-  for (const T& words : inputWords) {
-    input.write(words);
+  std::size_t index = 0;
+  for (std::size_t index = 0; index < inputWords.size(); index++) {
+    input.write(inputWords[index]);
   }
   
   function(input, output.data());
@@ -99,10 +110,40 @@ bool streamToMemoryMap(
   }
 
   if (!input.empty()) {
-    return 
+    return false;
+  }
+
+  return true;
+}
+
+template <typename F, typename T, typename U>
+bool memoryMapToMemoryMap(
+  const F& function,
+  const std::vector<T>& inputWords, 
+  const std::vector<U>& referenceWords
+) {
+  std::array<U, maxDataLength> input{};
+  std::array<U, maxDataLength> output{};
+
+  if (inputWords.size() > input.size()) {
+    return false;
+  }
+
+  if (referenceWords.size() > output.size()) {
+    return false;
+  }
+
+  function(input.data(), output.data());
+  
+  for (std::size_t index = 0; index < referenceWords.size(); index++) {
+    if (output[index] != referenceWords[index]) {
+        return false;
+    }
   }
 
   return true;
 }
 }
+
+#endif
 
