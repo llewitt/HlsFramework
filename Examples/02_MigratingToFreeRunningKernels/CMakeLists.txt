@@ -15,8 +15,8 @@ compile_unit_test(KERNEL unloader
 compile_xo(KERNEL unloader
            DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/src/unloader.cxx)
 
-#link_xclbins(PIPELINE MigratingToFreeRunningKernels
-#             DEPENDS loader
-#                     freeRunningKernel
-#                     unloader)
+link_xclbins(PIPELINE MigratingToFreeRunningKernels
+             DEPENDS loader
+                     freeRunningKernel
+                     unloader)
 
