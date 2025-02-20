@@ -1,0 +1,14 @@
+[
+  {
+    "kernelName": "allInOne",
+    "mode": "INPUT",
+    "fileName": "input.txt",
+    "argumentIndex": 0
+  },
+  {
+    "kernelName": "allInOne",
+    "mode": "OUTPUT",
+    "fileName": "output.txt",
+    "argumentIndex": 1
+  }
+]

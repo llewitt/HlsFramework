@@ -3,7 +3,8 @@
 #include "hls_stream.h"
 
 void freeRunningKernel(hls::stream<float>& input, hls::stream<float>& output) {
-  #pragma HLS INTERFACE ap_ctrl_none
+  #pragma HLS INTERFACE ap_ctrl_none port=return
+  #pragma HLS PIPELINE
 
   const float number = input.read();
 
