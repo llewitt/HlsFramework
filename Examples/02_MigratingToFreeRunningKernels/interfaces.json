@@ -1,0 +1,15 @@
+[
+  {
+    "kernelName": "loader",
+    "mode": "INPUT",
+    "fileName": "input.txt",
+    "argumentIndex": 0
+  },
+  {
+    "kernelName": "unloader",
+    "mode": "OUTPUT",
+    "fileName": "output.txt",
+    "argumentIndex": 1
+  }
+]
+
