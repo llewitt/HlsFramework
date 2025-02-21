@@ -220,16 +220,20 @@ int main(int argc, const char* argv[]) {
         }
 
         kernel.run.start();
+        std::cout << kernelName << ":\tStarted" << std::endl;
 
         break;
       }
+    }
 
+    for (const std::string& kernelName :  stage) {
       for (Kernel& kernel : kernels) {
         if (kernel.name != kernelName) {
           continue;
         }
 
         kernel.run.wait();
+        std::cout << kernelName << ":\tFinished" << std::endl;
 
         break;
       }
