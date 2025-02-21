@@ -1,4 +1,4 @@
 [
-  "loader", "unloader"
+  ["loader", "unloader"]
 ]
 
