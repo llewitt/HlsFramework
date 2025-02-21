@@ -10,11 +10,22 @@ void wideLoader(
   std::size_t index = 0;
   while (true) {
     const hls::vector<float, 16> numbers = input[index];
-    const hls::vector<bool, 16> numbersLessThanZero = numbers < 0;
 
     output.write(numbers);
 
-    if (numbersLessThanZero.or_reduce()) {
+    hls::vector<bool, 16> numbersLessThanZero{};
+    for (std::size_t numberIndex = 0; numberIndex < 16; numberIndex++) {
+      #pragma HLS UNROLL
+
+      if (numbers[numberIndex] < 0) {
+        numbersLessThanZero[numberIndex] = true;
+      }
+      else {
+        numbersLessThanZero[numberIndex] = false;
+      }
+    }
+
+    if (numbersLessThanZero.reduce_or()) {
       break;
     }
 

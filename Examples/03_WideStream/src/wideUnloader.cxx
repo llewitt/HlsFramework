@@ -4,18 +4,29 @@
 #include "hls_stream.h"
 #include "hls_vector.h"
 
-void widerUnloader(
+void wideUnloader(
   hls::stream<hls::vector<float, 16>>& input, 
   hls::vector<float, 16>* output
 ) {
   std::size_t index = 0;
   while (true) {
     const hls::vector<float, 16> numbers = input.read();
-    const hls::vector<bool, 16> numbersLessThanZero = numbers < 0;
 
-    output[index] = number;
+    output[index] = numbers;
 
-    if (numbersLessThanZero.or_reduce()) {
+    hls::vector<bool, 16> numbersLessThanZero{};
+    for (std::size_t numberIndex = 0; numberIndex < 16; numberIndex++) {
+      #pragma HLS UNROLL
+
+      if (numbers[numberIndex] < 0) {
+        numbersLessThanZero[numberIndex] = true;
+      }
+      else {
+        numbersLessThanZero[numberIndex] = false;
+      }
+    }
+
+    if (numbersLessThanZero.reduce_or()) {
       break;
     }
 
@@ -35,7 +46,7 @@ void widerUnloader(
 BOOST_AUTO_TEST_CASE(widerUnloaderTestCase)
 {
   BOOST_CHECK(UnitTesting::streamToMemoryMap(
-    widerUnloader,
+    wideUnloader,
     std::vector<hls::vector<float, 16>>{
       {0, 1, 2, 3, 4, 5, 6, 7, -1, -1, -1, -1, -1, -1, -1, -1}
     },

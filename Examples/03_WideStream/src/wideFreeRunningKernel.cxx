@@ -8,23 +8,25 @@ void wideFreeRunningKernel(
   hls::stream<hls::vector<float, 16>>& output
 ) {
   #pragma HLS INTERFACE ap_ctrl_none port=return
-  #pragma HLS PIPELINE
+  #pragma HLS PIPELINE style=flp
 
   const hls::vector<float, 16> numbers = input.read();
-  const hls::vector<float, 16> squaredNumbers{};
 
-  for (const std::size_t index = 0; index < 16; index++) {
+  hls::vector<float, 16> squaredNumbers{};
+  for (std::size_t index = 0; index < 16; index++) {
     #pragma HLS UNROLL 
 
     const float number = numbers[index];
 
-    if (numbers[index] < 0) {
-      squareNumbers[index] = number;
+    if (number < 0) {
+      squaredNumbers[index] = number;
     }
     else {
-      squareNumbers[index] = number * number;
+      squaredNumbers[index] = number * number;
     }
   }
+
+  output.write(squaredNumbers);
 }
 
 #ifndef __SYNTHESIS__
@@ -41,10 +43,10 @@ BOOST_AUTO_TEST_CASE(wideFreeRunningKernelTestCase)
   BOOST_CHECK(UnitTesting::streamToStream(
     wideFreeRunningKernel,
     std::vector<hls::vector<float, 16>>{
-      0, 1, 2, 3, 4, 5, 6, 7, -1, -1, -1, -1, -1, -1, -1, -1
+      {0, 1, 2, 3, 4, 5, 6, 7, -1, -1, -1, -1, -1, -1, -1, -1}
     },
     std::vector<hls::vector<float, 16>>{
-      0, 1, 4, 9, 16, 25, 36, 49, -1, -1, -1, -1, -1, -1, -1, -1
+      {0, 1, 4, 9, 16, 25, 36, 49, -1, -1, -1, -1, -1, -1, -1, -1}
     }
   )); 
 }
