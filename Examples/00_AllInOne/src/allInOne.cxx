@@ -7,8 +7,7 @@ void allInOne(const float* input, float* output) {
   while (true) {
     const float number = input[index]; 
 
-
-    if (number < 0) {
+    if (*reinterpret_cast<const int*>(&number) & (1 << 31)) {
       output[index] = number;
 
       break;
@@ -31,6 +30,7 @@ int main() {
 
   allInOne(input.data(), output.data());
   for (std::size_t index = 0; index < output.size(); index++) {
+    std::cout << output[index] << "\t" << outputReference[index] << std::endl;
     if (output[index] != outputReference[index]) {
        return -1;
     }

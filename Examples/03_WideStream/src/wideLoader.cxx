@@ -17,7 +17,7 @@ void wideLoader(
     for (std::size_t numberIndex = 0; numberIndex < 16; numberIndex++) {
       #pragma HLS UNROLL
 
-      if (numbers[numberIndex] < 0) {
+      if (*reinterpret_cast<const int*>(&numbers[numberIndex]) & (1 << 31)) {
         numbersLessThanZero[numberIndex] = true;
       }
       else {
@@ -56,6 +56,4 @@ BOOST_AUTO_TEST_CASE(wideLoaderTestCase)
 }
 
 #endif
-
-
 

@@ -18,7 +18,7 @@ void wideFreeRunningKernel(
 
     const float number = numbers[index];
 
-    if (number < 0) {
+    if (*reinterpret_cast<const int*>(&number) & (1 << 31)) {
       squaredNumbers[index] = number;
     }
     else {

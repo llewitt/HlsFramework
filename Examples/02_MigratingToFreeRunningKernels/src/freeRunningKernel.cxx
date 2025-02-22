@@ -8,7 +8,7 @@ void freeRunningKernel(hls::stream<float>& input, hls::stream<float>& output) {
 
   const float number = input.read();
 
-  if (number < 0) {
+  if (*reinterpret_cast<const int*>(&number) & (1 << 31)) {
     output.write(number);
   }
   else {

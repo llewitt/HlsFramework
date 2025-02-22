@@ -10,7 +10,7 @@ namespace {
 
       output.write(number);
 
-      if (number < 0) {
+      if (*reinterpret_cast<const int*>(&number) & (1 << 31)) {
         break;
       }
 
@@ -22,7 +22,7 @@ namespace {
     while (true) {
       const float number = input.read();
 
-      if (number < 0) {
+      if (*reinterpret_cast<const int*>(&number) & (1 << 31)) {
         output.write(number);
         
         break;
@@ -40,7 +40,7 @@ namespace {
 
       output[index] = number;
 
-      if (number < 0) {
+      if (*reinterpret_cast<const int*>(&number) & (1 << 31)) {
         break;
       }
 

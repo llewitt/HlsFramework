@@ -1,5 +1,5 @@
 #include <cstdlib>
-#include <iostream>
+#include <numeric>
 
 #include "hls_stream.h"
 #include "hls_vector.h"
@@ -14,19 +14,16 @@ void wideUnloader(
 
     output[index] = numbers;
 
-    hls::vector<bool, 16> numbersLessThanZero{};
-    for (std::size_t numberIndex = 0; numberIndex < 16; numberIndex++) {
-      #pragma HLS UNROLL
-
-      if (numbers[numberIndex] < 0) {
-        numbersLessThanZero[numberIndex] = true;
+    const bool foundSentinel = std::accumulate(
+      numbers.begin(), 
+      numbers.end(), 
+      false, 
+      [](const auto a, const auto b){ 
+        return a || (*reinterpret_cast<const int*>(&b) & (1 << 31)); 
       }
-      else {
-        numbersLessThanZero[numberIndex] = false;
-      }
-    }
+    );
 
-    if (numbersLessThanZero.reduce_or()) {
+    if (foundSentinel) {
       break;
     }
 

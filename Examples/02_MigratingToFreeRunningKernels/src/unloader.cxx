@@ -10,7 +10,7 @@ void unloader(hls::stream<float>& input, float* output) {
 
     output[index] = number;
 
-    if (number < 0) {
+    if (*reinterpret_cast<const int*>(&number) & (1 << 31)) {
       break;
     }
 

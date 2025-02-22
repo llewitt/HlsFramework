@@ -125,7 +125,12 @@ int main(int argc, const char* argv[]) {
         // Resize after push_back to ensure length is correct.
         numbers.resize(bufferSize);
 
-        inputInterfaces.back().bufferObject.write(numbers.data(), numbers.size(), 0);
+        inputInterfaces.back().bufferObject.write(
+          numbers.data(), 
+          sizeof(numbers[0]) * numbers.size(), 
+          0
+        );
+
         inputInterfaces.back().bufferObject.sync(XCL_BO_SYNC_BO_TO_DEVICE);
 
         break;
@@ -140,10 +145,10 @@ int main(int argc, const char* argv[]) {
         outputInterfaces.push_back(OutputInterface{
           .fileName = fileName,
           .bufferObject = xrt::bo(
-                device, 
-                sizeof(float) * bufferSize, 
-                xrt::bo::flags::normal, 
-                kernel.kernel.group_id(argumentIndex)
+            device, 
+            sizeof(float) * bufferSize, 
+            xrt::bo::flags::normal, 
+            kernel.kernel.group_id(argumentIndex)
           )
         });
 
@@ -244,7 +249,11 @@ int main(int argc, const char* argv[]) {
     std::array<float, bufferSize> numbers{};
 
     interface.bufferObject.sync(XCL_BO_SYNC_BO_FROM_DEVICE);
-    interface.bufferObject.read(numbers.data(), bufferSize, 0);
+    interface.bufferObject.read(
+      numbers.data(), 
+      sizeof(numbers[0]) * numbers.size(), 
+      0
+    );
 
     std::ofstream file{interface.fileName};
     for (const float number : numbers) {
