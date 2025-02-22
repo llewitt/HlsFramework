@@ -10,6 +10,12 @@
     "mode": "OUTPUT",
     "fileName": "output.txt",
     "argumentIndex": 1
+  },
+  {
+    "kernelName": "wideBurstLoader",
+    "mode": "VSIZE",
+    "fileName": "input.txt",
+    "argumentIndex": 2
   }
 ]
 

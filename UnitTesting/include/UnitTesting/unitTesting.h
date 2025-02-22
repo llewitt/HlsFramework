@@ -84,6 +84,45 @@ bool memoryMapToStream(
 }
 
 template <typename F, typename T, typename U>
+bool memoryMapWithVsizeToStream(
+  const F& function,
+  const std::vector<T>& inputWords, 
+  const std::vector<U>& referenceWords,
+  const std::size_t vsize
+) {
+  std::array<T, maxDataLength> input{};
+  hls::stream<U> output{};
+
+  if (inputWords.size() > input.size()) {
+    return false;
+  }
+
+  std::size_t index = 0;
+  for (const T& words : inputWords) {
+    input[index] = words;
+    index++;
+  }
+  
+  function(input.data(), output, vsize);
+  
+  for (std::size_t index = 0; index < referenceWords.size(); index++) {
+    if (output.empty()) {
+      return false;
+    }
+
+    if (output.read() != referenceWords[index]) {
+      return false;
+    }
+  }
+
+  if (!output.empty()) {
+    return false;
+  }
+
+  return true;
+}
+
+template <typename F, typename T, typename U>
 bool streamToMemoryMap(
   const F& function,
   const std::vector<T>& inputWords, 

@@ -217,6 +217,33 @@ int main(int argc, const char* argv[]) {
     }
   }
 
+  for (const nlohmann::json& interface : interfaces[0]) {
+    const std::string& kernelName = interface.at("kernelName").get<const std::string>();
+    const std::string& mode = interface.at("mode").get<const std::string>();
+    const std::string& fileName = interface.at("fileName").get<const std::string>();
+    const int argumentIndex = interface.at("argumentIndex").get<const int>();
+      
+    if (mode != "VSIZE") {
+      continue;
+    }
+
+    for (Kernel& kernel : kernels) {
+      if (kernelName != kernel.name) {
+        continue; 
+      }
+
+      std::ifstream file{fileName};
+
+      std::string line{};
+      std::size_t vsize = 0;
+      while (std::getline(file, line)) {
+        vsize++;
+      }
+
+      kernel.run.set_arg(argumentIndex, vsize);
+    }
+  }
+
   for (const nlohmann::json stage : stages[0]) {
     for (const std::string& kernelName :  stage) {
       for (Kernel& kernel : kernels) {
