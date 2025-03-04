@@ -1,40 +1,34 @@
 #include <cstdlib>
 
 #include "hls_stream.h"
+#include "ap_int.h"
 
-void allInOne(const float* input, float* output) {
-  std::size_t index = 0;
-  while (true) {
-    const float number = input[index]; 
+void allInOne(
+  const int* input, 
+  int* output, 
+  const std::size_t vsize
+) {
+  for (std::size_t index = 0; index < vsize; index++) {
+    const int number = input[index];
 
-    if (*reinterpret_cast<const int*>(&number) & (1 << 31)) {
-      output[index] = number;
-
-      break;
+    if (number < 0) {
+      output[index] = number; 
     }
     else {
-      output[index] = number * number;
+      output[index] = input[index] * input[index]; 
     }
-
-    index++;
   }
 }
 
 #ifndef __SYNTHESIS__
-#include <array>
+#include "UnitTesting/unitTesting.h"
 
 int main() {
-  const std::array<float, 9> input{0, 1, 2, 3, 4, 5, 6, 7, -1};
-  std::array<float, 9> output{};
-  const std::array<float, 9> outputReference{0, 1, 4, 9, 16, 25, 36, 49, -1};
-
-  allInOne(input.data(), output.data());
-  for (std::size_t index = 0; index < output.size(); index++) {
-    std::cout << output[index] << "\t" << outputReference[index] << std::endl;
-    if (output[index] != outputReference[index]) {
-       return -1;
-    }
-  }
+  allInOne(
+    UnitTesting::UnitTestableInputArray<int, 8192>({0, 1, 2, 3, 4, 5, 6, -1}), 
+    UnitTesting::UnitTestableOutputArray<int, 8192>({0, 1, 4, 9, 16, 25, 36, -1}),
+    8
+  );
 
   return 0;
 }

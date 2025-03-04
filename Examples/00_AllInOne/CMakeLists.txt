@@ -1,4 +1,6 @@
-compile_unit_test(KERNEL allInOne)
+compile_unit_test(KERNEL allInOne
+                  DEPENDS UnitTesting)
+
 compile_xo(KERNEL allInOne
            DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/src/allInOne.cxx)
 

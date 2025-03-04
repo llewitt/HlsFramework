@@ -3,26 +3,21 @@
 #include "hls_stream.h"
 
 namespace {
-  void loader(const float* input, hls::stream<float>& output) {
-    std::size_t index = 0;
-    while (true) {
-      const float number = input[index];
+  void loader(const int* input, hls::stream<int, 1>& output, std::size_t vsize) {
+    #pragma HLS INLINE off
 
-      output.write(number);
-
-      if (*reinterpret_cast<const int*>(&number) & (1 << 31)) {
-        break;
-      }
-
-      index++;
+    for (std::size_t index = 0; index < vsize; index++) {
+      output.write(input[index]);
     }
   }
 
-  void square(hls::stream<float>& input, hls::stream<float>& output) {
-    while (true) {
-      const float number = input.read();
+  void square(hls::stream<int, 1>& input, hls::stream<int, 1>& output) {
+    #pragma HLS INLINE off
 
-      if (*reinterpret_cast<const int*>(&number) & (1 << 31)) {
+    while (true) {
+      const int number = input.read();
+
+      if (number < 0) {
         output.write(number);
         
         break;
@@ -33,49 +28,51 @@ namespace {
     }
   }
 
-  void unloader(hls::stream<float>& input, float* output) {
+  void unloader(hls::stream<int, 1>& input, int* output) {
+    #pragma HLS INLINE off
+
     std::size_t index = 0;
+
     while (true) {
-      const float number = input.read();
+      const int number = input.read();
 
       output[index] = number;
-
-      if (*reinterpret_cast<const int*>(&number) & (1 << 31)) {
+      index++;
+      
+      if (number < 0) {
         break;
       }
-
-      index++;
     }
   }
 }
 
-void migratingToDataflow(const float* input, float* output) {
+void migratingToDataflow(
+  const int* input, 
+  int* output, 
+  const std::size_t vsize
+) {
   #pragma HLS DATAFLOW
+  #pragma HLS INTERFACE mode=m_axi port=input depth=8192
+  #pragma HLS INTERFACE mode=m_axi port=output depth=8192
 
-  hls::stream<float> loaderOutput("loaderOutput");
-  hls::stream<float> unloaderInput("unloaderInput");
+  hls::stream<int, 1> loaderOutput("loaderOutput");
+  hls::stream<int, 1> unloaderInput("unloaderInput");
 
-  loader(input, loaderOutput);
+  loader(input, loaderOutput, vsize);
   square(loaderOutput, unloaderInput);
   unloader(unloaderInput, output);
 }
 
 #ifndef __SYNTHESIS__
-#include <array>
+
+#include "UnitTesting/unitTesting.h"
 
 int main() {
-  const std::array<float, 9> input{0, 1, 2, 3, 4, 5, 6, 7, -1};
-  std::array<float, 9> output{};
-  const std::array<float, 9> outputReference{0, 1, 4, 9, 16, 25, 36, 49, -1};
-
-  migratingToDataflow(input.data(), output.data());
-  for (std::size_t index = 0; index < output.size(); index++) {
-    if (output[index] != outputReference[index]) {
-       return -1;
-    }
-  }
-
-  return 0;
+  migratingToDataflow(
+    UnitTesting::UnitTestableInputArray<int, 8192>({0, 1, 2, 3, 4, 5, 6, -1}), 
+    UnitTesting::UnitTestableOutputArray<int, 8192>({0, 1, 4, 9, 16, 25, 36, -1}),
+    8
+  );
 }
 
 #endif

@@ -24,7 +24,7 @@ in a single kernel. The goal is to provide an opinionated set of
 reccommendations for developing firmware using hls that can be easily refactored 
 to improve performance and maintability.
 
-## Scenarios
+## Scenarios [Coming Soon]
 The scenarios are intended to make up the remainder of the tutorial. Each 
 scenario comes with either an open ended task, e.g. parallelise this kernel with 
 a factor of eight, or a specific defect which can be fixed, e.g. fix a failing 
@@ -55,7 +55,7 @@ cmake --build . --parallel 4
 ```
 ctest
 cd ../Run
-echo $(seq 0 14) -1 >> input.txt
+echo $(seq 1 2) -1 | sed "s/ /\n/g" > input.txt
 XCL_EMULATION_MODE=hw_emu ../Build/Host/host.exe \
     ../Build/Targets/AllInOne_hw_emu.xclbin 
     ../HlsFramework/Examples/00_AllInOne/interfaces.json \

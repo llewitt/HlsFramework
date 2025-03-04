@@ -1,6 +1,4 @@
 add_subdirectory(00_AllInOne)
 add_subdirectory(01_MigratingToDataflow)
 add_subdirectory(02_MigratingToFreeRunningKernels)
-add_subdirectory(03_WideStream)
-add_subdirectory(04_BurstTransfer)
 

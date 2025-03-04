@@ -95,7 +95,7 @@ int main(int argc, const char* argv[]) {
           .fileName = fileName,
           .bufferObject = xrt::bo(
                 device, 
-                sizeof(float) * bufferSize, 
+                sizeof(int) * bufferSize, 
                 xrt::bo::flags::normal, 
                 kernel.kernel.group_id(argumentIndex)
           )
@@ -103,12 +103,12 @@ int main(int argc, const char* argv[]) {
 
         kernel.run.set_arg(argumentIndex, inputInterfaces.back().bufferObject);
 
-        std::vector<float> numbers{};
+        std::vector<int> numbers{};
         std::ifstream file{fileName};
 
         std::string line{};
         while (std::getline(file, line)) {
-          numbers.push_back(std::stof(line));
+          numbers.push_back(std::stoi(line));
         }
 
         if (numbers.size() > bufferSize) {
@@ -146,7 +146,7 @@ int main(int argc, const char* argv[]) {
           .fileName = fileName,
           .bufferObject = xrt::bo(
             device, 
-            sizeof(float) * bufferSize, 
+            sizeof(int) * bufferSize, 
             xrt::bo::flags::normal, 
             kernel.kernel.group_id(argumentIndex)
           )
@@ -273,7 +273,7 @@ int main(int argc, const char* argv[]) {
   }
 
   for (OutputInterface& interface : outputInterfaces) {
-    std::array<float, bufferSize> numbers{};
+    std::array<int, bufferSize> numbers{};
 
     interface.bufferObject.sync(XCL_BO_SYNC_BO_FROM_DEVICE);
     interface.bufferObject.read(
@@ -283,7 +283,7 @@ int main(int argc, const char* argv[]) {
     );
 
     std::ofstream file{interface.fileName};
-    for (const float number : numbers) {
+    for (const int number : numbers) {
       file << number << std::endl;
     }
   }

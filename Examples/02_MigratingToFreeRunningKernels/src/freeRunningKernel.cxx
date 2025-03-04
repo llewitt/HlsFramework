@@ -2,84 +2,64 @@
 
 #include "hls_stream.h"
 
-void freeRunningKernel(hls::stream<float>& input, hls::stream<float>& output) {
+void freeRunningKernel(hls::stream<int>& input, hls::stream<int>& output) {
   #pragma HLS INTERFACE ap_ctrl_none port=return
-  #pragma HLS PIPELINE
+  #pragma HLS PIPELINE style=flp
 
-  const float number = input.read();
+  const int number = input.read();
 
-  if (*reinterpret_cast<const int*>(&number) & (1 << 31)) {
+  if (number < 0) {
     output.write(number);
   }
   else {
-    output.write(number * number);
+    output.write(number * number); 
   }
 }
 
 #ifndef __SYNTHESIS__
 
-#define BOOST_TEST_MODULE freeRunningKernelTestSuite
-#include <vector>
-
-#include <boost/test/unit_test.hpp>
-
 #include "UnitTesting/unitTesting.h"
 
-BOOST_AUTO_TEST_CASE(freeRunningKernelTestCase)
-{
-  BOOST_CHECK(UnitTesting::streamToStream(
-    freeRunningKernel,
-    std::vector<float>{0},
-    std::vector<float>{0}
-  )); 
+int main() {
+  freeRunningKernel(
+    UnitTesting::UnitTestableInputStream<int>({0}), 
+    UnitTesting::UnitTestableOutputStream<int>({0})
+  );
 
-  BOOST_CHECK(UnitTesting::streamToStream(
-    freeRunningKernel,
-    std::vector<float>{1},
-    std::vector<float>{1}
-  )); 
+  freeRunningKernel(
+    UnitTesting::UnitTestableInputStream<int>({1}), 
+    UnitTesting::UnitTestableOutputStream<int>({1})
+  );
 
-  BOOST_CHECK(UnitTesting::streamToStream(
-    freeRunningKernel,
-    std::vector<float>{2},
-    std::vector<float>{4}
-  )); 
+  freeRunningKernel(
+    UnitTesting::UnitTestableInputStream<int>({2}), 
+    UnitTesting::UnitTestableOutputStream<int>({4})
+  );
 
-  BOOST_CHECK(UnitTesting::streamToStream(
-    freeRunningKernel,
-    std::vector<float>{3},
-    std::vector<float>{9}
-  )); 
+  freeRunningKernel(
+    UnitTesting::UnitTestableInputStream<int>({3}), 
+    UnitTesting::UnitTestableOutputStream<int>({9})
+  );
 
-  BOOST_CHECK(UnitTesting::streamToStream(
-    freeRunningKernel,
-    std::vector<float>{4},
-    std::vector<float>{16}
-  )); 
+  freeRunningKernel(
+    UnitTesting::UnitTestableInputStream<int>({4}), 
+    UnitTesting::UnitTestableOutputStream<int>({16})
+  );
 
-  BOOST_CHECK(UnitTesting::streamToStream(
-    freeRunningKernel,
-    std::vector<float>{5},
-    std::vector<float>{25}
-  )); 
+  freeRunningKernel(
+    UnitTesting::UnitTestableInputStream<int>({5}), 
+    UnitTesting::UnitTestableOutputStream<int>({25})
+  );
 
-  BOOST_CHECK(UnitTesting::streamToStream(
-    freeRunningKernel,
-    std::vector<float>{6},
-    std::vector<float>{36}
-  )); 
+  freeRunningKernel(
+    UnitTesting::UnitTestableInputStream<int>({6}), 
+    UnitTesting::UnitTestableOutputStream<int>({36})
+  );
 
-  BOOST_CHECK(UnitTesting::streamToStream(
-    freeRunningKernel,
-    std::vector<float>{7},
-    std::vector<float>{49}
-  )); 
-
-  BOOST_CHECK(UnitTesting::streamToStream(
-    freeRunningKernel,
-    std::vector<float>{-1},
-    std::vector<float>{-1}
-  )); 
+  freeRunningKernel(
+    UnitTesting::UnitTestableInputStream<int>({-1}), 
+    UnitTesting::UnitTestableOutputStream<int>({-1})
+  );
 }
 
 #endif
