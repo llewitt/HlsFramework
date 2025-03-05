@@ -1,0 +1,21 @@
+[
+  {
+    "kernelName": "loader",
+    "mode": "INPUT",
+    "fileName": "input.txt",
+    "argumentIndex": 0
+  },
+  {
+    "kernelName": "unloader",
+    "mode": "OUTPUT",
+    "fileName": "output.txt",
+    "argumentIndex": 1
+  },
+  {
+    "kernelName": "loader",
+    "mode": "VSIZE",
+    "fileName": "input.txt",
+    "argumentIndex": 2
+  }
+]
+

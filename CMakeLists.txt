@@ -19,11 +19,10 @@ function(compile_unit_test)
                  src/${compile_unit_test_KERNEL}.cxx 
                  ${compile_unit_test_SOURCES})
 
-  target_link_libraries(${compile_unit_test_KERNEL}UnitTest.exe PRIVATE ${Boost_LIBRARIES} ${compile_unit_test_DEPENDS})
+  target_link_libraries(${compile_unit_test_KERNEL}UnitTest.exe PRIVATE UnitTesting)
 
   target_include_directories(${compile_unit_test_KERNEL}UnitTest.exe PRIVATE include)
   target_include_directories(${compile_unit_test_KERNEL}UnitTest.exe PRIVATE /opt/Xilinx/Vitis_HLS/2024.1/include)
-  target_include_directories(${compile_unit_test_KERNEL}UnitTest.exe PRIVATE ${Boost_INCLUDE_DIRS})
 
   add_test(NAME ${compile_unit_test_KERNEL}UnitTest COMMAND ${compile_unit_test_KERNEL}UnitTest.exe)
   add_custom_target(${compile_unit_test_KERNEL}UnitTestRun 
@@ -141,7 +140,6 @@ enable_testing()
 
 find_package(OpenCL REQUIRED)
 find_package(XRT REQUIRED)
-find_package(Boost REQUIRED COMPONENTS unit_test_framework)
 find_package(nlohmann_json REQUIRED)
 
 # FIXME this a hack as this library is currently not distributed in CVMFS
@@ -163,5 +161,6 @@ endif()
 
 add_subdirectory(UnitTesting)
 add_subdirectory(Examples)
+add_subdirectory(Scenarios)
 add_subdirectory(Host)
 
