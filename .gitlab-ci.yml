@@ -1,0 +1,4 @@
+unit-tests:
+  script:
+      - cd ${CI_BUILD_DIR}; cmake ${CI_PROJECT_DIR}; cmake --build . --parallel
+      - cd ${CI_BUILD_DIR}; ctest
