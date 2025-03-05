@@ -55,7 +55,7 @@ cmake --build . --parallel 4
 ```
 ctest
 cd ../Run
-echo $(seq 1 2) -1 | sed "s/ /\n/g" > input.txt
+echo $(seq 1 8190) -1 | sed "s/ /\n/g" > input.txt
 XCL_EMULATION_MODE=hw_emu ../Build/Host/host.exe \
     ../Build/Targets/AllInOne_hw_emu.xclbin 
     ../HlsFramework/Examples/00_AllInOne/interfaces.json \
