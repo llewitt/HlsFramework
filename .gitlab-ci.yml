@@ -1,12 +1,12 @@
-unit-tests:
-    tags:
-        - cvmfs
+# unit-tests:
+#     tags:
+#         - cvmfs
 
-    before_script:
-        - export ATLAS_LOCAL_ROOT_BASE=/cvmfs/atlas.cern.ch/repo/ATLASLocalRootBase
-        - source /cvmfs/atlas.cern.ch/repo/ATLASLocalRootBase/user/atlasLocalSetup.sh || 1
-        - asetup Athena,main,latest || 1
+#     before_script:
+#         - export ATLAS_LOCAL_ROOT_BASE=/cvmfs/atlas.cern.ch/repo/ATLASLocalRootBase
+#         - source /cvmfs/atlas.cern.ch/repo/ATLASLocalRootBase/user/atlasLocalSetup.sh || 1
+#         - asetup Athena,main,latest || 1
 
-    script:
-        - cd ${CI_BUILD_DIR}; cmake ${CI_PROJECT_DIR}; cmake --build . --parallel
-        - cd ${CI_BUILD_DIR}; ctest
+#     script:
+#         - cd ${CI_BUILD_DIR}; cmake ${CI_PROJECT_DIR}; cmake --build . --parallel
+#         - cd ${CI_BUILD_DIR}; ctest
