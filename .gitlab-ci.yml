@@ -4,8 +4,8 @@ unit-tests:
 
     before_script:
         - export ATLAS_LOCAL_ROOT_BASE=/cvmfs/atlas.cern.ch/repo/ATLASLocalRootBase
-        - source /cvmfs/atlas.cern.ch/repo/ATLASLocalRootBase/user/atlasLocalSetup.sh
-        - asetup Athena,main,latest
+        - source /cvmfs/atlas.cern.ch/repo/ATLASLocalRootBase/user/atlasLocalSetup.sh || 1
+        - asetup Athena,main,latest || 1
 
     script:
         - cd ${CI_BUILD_DIR}; cmake ${CI_PROJECT_DIR}; cmake --build . --parallel
