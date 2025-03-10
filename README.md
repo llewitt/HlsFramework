@@ -24,7 +24,7 @@ in a single kernel. The goal is to provide an opinionated set of
 reccommendations for developing firmware using hls that can be easily refactored 
 to improve performance and maintability.
 
-## Scenarios [Coming Soon]
+## Scenarios
 The scenarios are intended to make up the remainder of the tutorial. Each 
 scenario comes with either an open ended task, e.g. parallelise this kernel with 
 a factor of eight, or a specific defect which can be fixed, e.g. fix a failing 
