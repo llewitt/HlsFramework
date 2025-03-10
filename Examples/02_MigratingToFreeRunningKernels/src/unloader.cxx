@@ -1,18 +1,24 @@
 #include <cstdlib>
 
 #include "hls_stream.h"
+#include "hls_burst_maxi.h"
 
-void unloader(hls::stream<int>& input, int* output) {
-  std::size_t index = 0;
-  while (true) {
-    const float number = input.read();
+void unloader(hls::stream<int>& input, hls::burst_maxi<int> output) {
+  #pragma HLS INTERFACE mode=m_axi port=output depth=8192
+  
+  bool done = false;
+  std::size_t burst = 0;
+  while (!done) {
+    output.write_request(burst * 16, 16);
 
-    output[index] = number;
-    index++;
-
-    if (number < 0) {
-      break;
+    for (std::size_t index = 0; index < 16; index++) {
+      const int number = !done ? input.read() : -1;
+      done |= number < 0;
+      output.write(number);
     }
+
+    output.write_response();
+    burst++;
   }
 }
 

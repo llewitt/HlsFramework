@@ -126,7 +126,8 @@ function(link_xclbin)
                                  --config ${CMAKE_CURRENT_SOURCE_DIR}/config.ini
                                  --output ${CMAKE_BINARY_DIR}/Targets/${link_xclbin_PIPELINE}_${link_xclbin_EMULATION_MODE}.xclbin
                       DEPENDS ${link_xclbin_DEPENDS}
-                              ${__link_xclbin_DEPENDS})
+                              ${__link_xclbin_DEPENDS}
+                              ${CMAKE_CURRENT_SOURCE_DIR}/config.ini)
 
   unset(_link_xclbin_DEPENDS)
   unset(__link_xclbin_DEPENDS)

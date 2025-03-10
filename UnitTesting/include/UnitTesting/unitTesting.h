@@ -7,6 +7,7 @@
 #include <array>
 
 #include "hls_stream.h"
+#include "hls_burst_maxi.h"
 
 #define assertm(exp, msg) assert((void(msg), exp))
 
@@ -49,8 +50,10 @@ class UnitTestableOutputStream {
         "Output stream is empty while checking against reference."
       ); 
 
+      T tmp = m_stream.read();
+
       assertm(
-        element == m_stream.read(), 
+        element == tmp, 
         "Output stream does not match reference."
       ); 
    }
@@ -80,6 +83,10 @@ class UnitTestableInputArray {
   operator const T*() {
     return m_array.data();
   }
+
+  operator hls::burst_maxi<T>() {
+    return m_array.data();
+  }
 };
 
 template <typename T, std::size_t MAX_SIZE>
@@ -105,6 +112,10 @@ class UnitTestableOutputArray {
   }
 
   operator T*() {
+    return m_array.data();
+  }
+
+  operator hls::burst_maxi<T>() {
     return m_array.data();
   }
 };
