@@ -1,5 +1,6 @@
 compile_unit_test(KERNEL loader
                   DEPENDS UnitTesting)
+
 compile_xo(KERNEL loader
            DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/src/loader.cxx)
 

@@ -3,4 +3,6 @@ add_subdirectory(00_ExtendingADataflow_SolutionA)
 add_subdirectory(01_ParameterisingFirmware_Scenario)
 add_subdirectory(01_ParameterisingFirmware_SolutionA)
 add_subdirectory(01_ParameterisingFirmware_SolutionB)
+add_subdirectory(02_Splitter_Scenario)
+add_subdirectory(02_Splitter_SolutionA)
 

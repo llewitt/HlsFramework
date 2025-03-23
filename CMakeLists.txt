@@ -40,7 +40,6 @@ function(compile_xo)
                         "${multiValueArgs}" 
                         ${ARGN})
 
-
   list(TRANSFORM compile_xo_INCLUDES
        PREPEND "--include="
        OUTPUT_VARIABLE _compile_xo_INCLUDES)
@@ -64,6 +63,26 @@ function(compile_xo)
   add_custom_target(${compile_xo_KERNEL}
                     ALL
                     DEPENDS ${CMAKE_BINARY_DIR}/Targets/${compile_xo_KERNEL}.xo)
+endfunction()
+
+function(package_xo)
+  set(options)
+  set(oneValueArgs KERNEL)
+  set(multiValueArgs INCLUDES)
+  cmake_parse_arguments(package_xo
+                        "${options}" 
+                        "${oneValueArgs}"
+                        "${multiValueArgs}" 
+                        ${ARGN})
+
+  # Do not bother with dependencies since is very fast.
+  add_custom_target(${package_xo_KERNEL}
+                    COMMAND vivado -mode batch 
+                                   -source ${CMAKE_CURRENT_SOURCE_DIR}/config.tcl
+                                   -tclargs ${CMAKE_CURRENT_SOURCE_DIR}
+                                            ${CMAKE_BINARY_DIR}
+                                            ${package_xo_KERNEL}
+                                            ${package_xo_INCLUDES})
 endfunction()
 
 function(link_xclbins)
