@@ -39,7 +39,7 @@ TBD
 ```
 mkdir HlsTutorial
 cd HlsTutorial
-git clone ssh://git@gitlab.cern.ch:7999/llewitt/HlsFramework.git
+git clone https://github.com/llewitt/HlsFramework.git
 mkdir Build
 mkdir Run
 ```
