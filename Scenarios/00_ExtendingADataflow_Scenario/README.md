@@ -5,7 +5,7 @@ would lend itself to extension. Now we will demonstrate this power!
 ## Scenario
 You have been provided a free running kernel that multiplies numbers by three.
 
-We have been asked to change this kernel so that only keep numbers (still 
+We have been asked to change this kernel so that we only keep even numbers (still 
 multiplying by three but checking the result and only forwarding the resulting 
 number if it is even).
 
